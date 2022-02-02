@@ -1,0 +1,5 @@
+query checkBackend {
+    getAllCreators(limit: 1) {
+        id
+    }
+}

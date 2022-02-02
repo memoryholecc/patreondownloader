@@ -1,0 +1,5 @@
+mutation addPatreonPostComments($postId: ID!, $comments: [PatreonCommentDto!]!) {
+    addPatreonPostComments(postId:$postId, comments: $comments) {
+        id
+    }
+}

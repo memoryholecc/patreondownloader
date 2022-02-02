@@ -1,0 +1,10 @@
+query getCreatorById($id: ID!) {
+    getCreatorById(creatorId: $id){
+        id,
+        name,
+        bannerPicture,
+        profilePicture,
+        created,
+        lastUpdated
+    }
+}

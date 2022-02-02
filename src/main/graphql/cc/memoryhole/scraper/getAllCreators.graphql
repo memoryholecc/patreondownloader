@@ -1,0 +1,6 @@
+query getAllCreators {
+    getAllCreators {
+        id,
+        name
+    }
+}

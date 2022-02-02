@@ -1,0 +1,148 @@
+type PatreonComment {
+  id: ID!
+  authorUsername: String!
+  authorPicture: String!
+  authorUrl: String!
+  postedAt: DateTime!
+  contents: String!
+  post: PatreonPost!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PatreonAttachment {
+  id: ID!
+  displayName: String!
+  filename: String!
+  creator: Creator!
+  post: PatreonPost!
+}
+
+type PatreonEmbed {
+  id: ID!
+  subject: String
+  description: String
+  provider: String
+  url: String!
+}
+
+type PatreonPost {
+  id: ID!
+  postedAt: DateTime!
+  title: String!
+  imageUrl: String
+  contents: String!
+  plainContents: String!
+  attachments: [PatreonAttachment!]!
+  comments: [PatreonComment!]!
+  embeds: [PatreonEmbed!]!
+  creator: PatreonCreator!
+}
+
+type PatreonCreator {
+  campaignId: ID!
+  username: String!
+  posts: [PatreonPost!]!
+  creator: Creator!
+}
+
+type Creator {
+  id: ID!
+  name: String!
+  profilePicture: String
+  bannerPicture: String
+  patreon: [PatreonCreator!]
+  totalPostCount: Int!
+  lastUpdated: DateTime!
+  created: DateTime!
+}
+
+type Query {
+  getAllCreators(skip: Int = """0""", limit: Int = """25""", sortBy: sortBy): [Creator!]!
+  getCreatorById(creatorId: ID!): Creator!
+  getCreatorsByIds(sortBy: sortBy, creatorIds: [ID!]!): [Creator!]!
+  searchCreatorByName(skip: Int = """0""", limit: Int = """25""", sortBy: sortBy, name: String!): [Creator!]!
+  getAllPatreons(limit: Int = """25"""): [PatreonCreator!]!
+  getPatreonsByCreatorId(creatorId: ID!): [PatreonCreator!]!
+  getPatreonByCampaignId(campaignId: ID!): PatreonCreator!
+  getPatreonByCampaignIds(campaignIds: [ID!]!): [PatreonCreator!]!
+  searchPatreonsByName(limit: Int = """25""", name: String!): [PatreonCreator!]!
+  getPatreonPosts(skip: Int = """0""", limit: Int = """50""", sortBy: sortBy, campaignId: ID!): [PatreonPost!]!
+  getPatreonPostById(postId: ID!): PatreonPost!
+}
+
+enum sortBy {
+  """
+  Sort by newest (DESC)
+  """
+  LAST_CREATED
+  """
+  Sort by last updated (DESC)
+  """
+  LAST_UPDATED
+  """
+  Sort by name (ASC)
+  """
+  NAME
+}
+
+type Mutation {
+  createCreator(creator: CreatorDto!): Creator!
+  addPatreonPostAttachments(postId: ID!, attachments: [PatreonAttachmentDto!]!): [PatreonAttachment!]!
+  addPatreonPostComments(postId: ID!, comments: [PatreonCommentDto!]!): [PatreonComment!]!
+  createPatreon(creatorId: ID!, patreon: PatreonCreatorDto!): PatreonCreator!
+  addPatreonPosts(creatorCampaignId: ID!, posts: [PatreonPostDto!]!): [PatreonPost!]!
+}
+
+input CreatorDto {
+  name: String!
+  profilePicture: String
+  bannerPicture: String
+}
+
+input PatreonAttachmentDto {
+  id: ID!
+  displayName: String!
+  filename: String!
+}
+
+input PatreonCommentDto {
+  id: ID!
+  authorUsername: String!
+  authorPicture: String
+  authorUrl: String
+  postedAt: DateTime!
+  contents: String!
+}
+
+input PatreonCreatorDto {
+  campaignId: ID!
+  username: String!
+}
+
+input PatreonPostDto {
+  id: Int!
+  postedAt: DateTime!
+  title: String!
+  imageUrl: String
+  contents: String!
+  plainContents: String!
+  attachments: [PatreonAttachmentDto!]
+  comments: [PatreonCommentDto!]
+  embeds: [PatreonEmbedDto!]
+}
+
+input PatreonEmbedDto {
+  subject: String
+  description: String
+  provider: String
+  url: String!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

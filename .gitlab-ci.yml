@@ -1,0 +1,27 @@
+cache:
+    paths:
+        - node_modules/
+
+stages:
+  - gh_mirror
+        
+gh_mirror:
+  only:
+    - master
+  image: ubuntu:18.04
+  stage: gh_mirror
+  before_script:
+    - apt --yes update
+    - apt --yes install git
+  script:
+    - |
+      rm -rf .git
+      git init
+      git config --global user.email "devs@memoryhole.cc"
+      git config --global user.name "MemoryHole Ninjas"
+      git config --global push.default simple
+      git remote add mirror https://memoryhole:$GITHUB_PUSH_TOKEN@$GH_MIRROR_HOST
+      git add .
+      git commit -m "Brought you by the ninjas at the Memory Hole headquarters ($CI_COMMIT_SHA)"
+      git push --force mirror master
+

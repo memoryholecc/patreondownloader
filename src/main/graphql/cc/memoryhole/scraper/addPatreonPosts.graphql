@@ -1,0 +1,6 @@
+mutation addPatreonPosts($campaignId: ID!, $posts: [PatreonPostDto!]!) {
+    addPatreonPosts( creatorCampaignId:$campaignId , posts: $posts) {
+        id
+    }
+}
+

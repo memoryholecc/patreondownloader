@@ -1,0 +1,6 @@
+mutation createCreator($creator: CreatorDto!) {
+    createCreator(creator: $creator) {
+        id
+    }
+}
+

@@ -1,0 +1,8 @@
+mutation createPatreon($id: ID!,$username: String!, $campaignId: ID!) {
+    createPatreon(creatorId: $id, patreon: {username: $username, campaignId: $campaignId}) {
+        creator {
+            id
+        }
+    }
+}
+

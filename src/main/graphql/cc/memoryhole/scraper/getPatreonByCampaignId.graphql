@@ -1,0 +1,7 @@
+query getPatreonByCampaignId($id: ID!) {
+    getPatreonByCampaignId(campaignId: $id){
+        creator {
+            id,
+        },
+    }
+}
